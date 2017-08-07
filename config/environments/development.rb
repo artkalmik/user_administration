@@ -42,6 +42,12 @@ Rails.application.configure do
   # number of complex assets.
   config.assets.debug = true
 
+  # ActionMailer Config
+  # Send email in development mode?
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  config.action_mailer.perform_deliveries = false
+
+
   # Suppress logger output for asset requests.
   config.assets.quiet = true
 

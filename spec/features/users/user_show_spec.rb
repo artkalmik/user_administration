@@ -8,21 +8,19 @@ feature 'User profile page', :devise do
     Warden.test_reset!
   end
 
-  scenario 'user sees own profile' do
+  scenario 'user cannot see profiles' do
     user = FactoryGirl.create(:user)
     login_as(user, :scope => :user)
     visit user_path(user)
-    expect(page).to have_content 'User'
-    expect(page).to have_content user.email
+    expect(page).to have_content 'Users are not allowed to do this!'
   end
 
-  scenario "user cannot see another user's profile" do
-    me = FactoryGirl.create(:user)
-    other = FactoryGirl.create(:user, email: 'other@example.com')
-    login_as(me, :scope => :user)
-    Capybara.current_session.driver.header 'Referer', root_path
-    visit user_path(other)
-    expect(page).to have_content 'Access denied.'
+  scenario 'admin can see profiles' do
+    user = FactoryGirl.create(:user, is_admin: true)
+    login_as(user, scope: :user)
+    visit user_path(user)
+    expect(page).to have_content 'User'
+    expect(page).to have_content user.email
   end
 
 end
